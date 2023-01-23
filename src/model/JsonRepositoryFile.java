@@ -20,6 +20,16 @@ public class JsonRepositoryFile implements Repository {
         }
         return notes;
     }
+    @Override
+    public Note noteRead(String id) {
+        List<Note> notes = getAllNotes();
+        return notes.stream().filter(p-> p.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    @Override
+    public void exit() {
+
+    }
 
     @Override
     public void createNote(Note note) {

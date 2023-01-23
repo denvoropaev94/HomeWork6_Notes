@@ -1,4 +1,6 @@
 package views;
+import loggers.FileLogger;
+import loggers.LogRepositoryFileDecorator;
 import model.Note;
 import controllers.NoteController;
 import model.*;
@@ -25,8 +27,12 @@ public class ViewNote {
         Repository repository;
 
         fileOperation = new FileOperationImpl("notes.json");
-        repository = new JsonRepositoryFile(fileOperation);
-        this.noteController = new NoteController(repository);
+        repository = new LogRepositoryFileDecorator(
+                new JsonRepositoryFile(fileOperation),
+                new FileLogger(new FileAppendOperationImpl("logi")));
+        NoteController noteController = new NoteController(repository);
+//        repository = new JsonRepositoryFile(fileOperation);
+//        this.noteController = new NoteController(repository);
 
 
         while (true) {
@@ -40,7 +46,10 @@ public class ViewNote {
 
             com = Commands.valueOf(command.toUpperCase());
 
-            if (com == Commands.EXIT) return;
+            if (com == Commands.EXIT)  {
+                noteController.exit();
+            return;
+            }
             try {
                 switch (com) {
                     case CREATE:

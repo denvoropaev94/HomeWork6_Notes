@@ -16,15 +16,11 @@ public class NoteController {
         repository.createNote(note);
     }
 
-    public Note noteRead(String id) throws Exception {
-        List<Note> notes = repository.getAllNotes();
-        for (Note note : notes) {
-            if (note.getId().equals(id)) {
-                return note;
-            }
-        }
-
-        throw new Exception("Note with id:" + id + " not found");
+    public Note noteRead(String id)  {
+        return repository.noteRead(id);
+    }
+    public void exit(){
+        repository.exit();
     }
 
     public List<Note> readAll() {
@@ -44,11 +40,12 @@ public class NoteController {
 
 
 
-    public void idExists(String id) throws Exception {
+    public boolean idExists(String id) throws Exception {
         List<Note> notes = repository.getAllNotes();
         Note note = notes.stream().filter(p -> p.getId().equals(id)).findAny().orElse(null);
         if (note == null)
-            throw new Exception("Note with id:" + id + " not found");
+            throw new Exception("Заметка с идентификатром: " + id + " не найдена.");
+        return true;
     }
 
     public boolean recordsExist() {
